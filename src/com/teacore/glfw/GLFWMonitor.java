@@ -11,7 +11,7 @@ import org.lwjgl.glfw.GLFW;
  * 
  * @author ShietStone
  */
-public class GLFWMonitor {
+public final class GLFWMonitor {
 
     private static GLFWMonitor[] monitors;
     

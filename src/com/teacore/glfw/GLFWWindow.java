@@ -15,7 +15,7 @@ import org.lwjgl.system.MemoryStack;
  * 
  * @author ShiteStone
  */
-public class GLFWWindow {
+public final class GLFWWindow {
     
     private static ArrayList<GLFWWindow> windows;
     

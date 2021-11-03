@@ -8,7 +8,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
  * 
  * @author ShietStone
  */
-public class GLFWUtil {
+public final class GLFWUtil {
 
     private static boolean initialized;
     private static boolean terminated;
