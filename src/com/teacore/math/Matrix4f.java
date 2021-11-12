@@ -129,7 +129,6 @@ public class Matrix4f {
                 vector.x * f30 + vector.y * f31 + vector.z * f32 + vector.w * f33);
     }
     
-    //TODO Duplicate of matrix.f02
     /**
      * Multiplies a matrix with this matrix. The matrix may not be null.
      * 

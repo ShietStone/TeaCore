@@ -108,4 +108,21 @@ public class MathUtil {
                 0.0f, 0.0f, 1.0f
         });
     }
+    
+    /**
+     * Returns a rotation matrix for 2D space. This matrix would be the equivalent to rotating 
+     * around the z axis in 3D.
+     * 
+     * @param angle The angle to rotate by
+     * @return The rotation matrix
+     */
+    public static Matrix2f getRotationMatrix(float angle) {
+        float cos = (float) Math.cos(Math.toRadians(angle));
+        float sin = (float) Math.sin(Math.toRadians(angle));
+        
+        return new Matrix2f(new float[] {
+                cos, -sin,
+                sin, cos
+        });
+    }
 }
