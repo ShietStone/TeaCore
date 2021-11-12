@@ -129,6 +129,7 @@ public class Matrix4f {
                 vector.x * f30 + vector.y * f31 + vector.z * f32 + vector.w * f33);
     }
     
+    //TODO Duplicate of matrix.f02
     /**
      * Multiplies a matrix with this matrix. The matrix may not be null.
      * 
@@ -139,18 +140,18 @@ public class Matrix4f {
         return new Matrix4f(f00 * matrix.f00 + f01 * matrix.f10 + f02 * matrix.f20 + f03 * matrix.f30,
                             f00 * matrix.f01 + f01 * matrix.f11 + f02 * matrix.f21 + f03 * matrix.f31,
                             f00 * matrix.f02 + f01 * matrix.f12 + f02 * matrix.f22 + f03 * matrix.f32,
-                            f00 * matrix.f02 + f01 * matrix.f12 + f02 * matrix.f22 + f03 * matrix.f33,
+                            f00 * matrix.f03 + f01 * matrix.f13 + f02 * matrix.f23 + f03 * matrix.f33,
                             f10 * matrix.f00 + f11 * matrix.f10 + f12 * matrix.f20 + f13 * matrix.f30,
                             f10 * matrix.f01 + f11 * matrix.f11 + f12 * matrix.f21 + f13 * matrix.f31,
                             f10 * matrix.f02 + f11 * matrix.f12 + f12 * matrix.f22 + f13 * matrix.f32,
-                            f10 * matrix.f02 + f11 * matrix.f12 + f12 * matrix.f22 + f13 * matrix.f33,
+                            f10 * matrix.f03 + f11 * matrix.f13 + f12 * matrix.f23 + f13 * matrix.f33,
                             f20 * matrix.f00 + f21 * matrix.f10 + f22 * matrix.f20 + f23 * matrix.f30,
                             f20 * matrix.f01 + f21 * matrix.f11 + f22 * matrix.f21 + f23 * matrix.f31,
                             f20 * matrix.f02 + f21 * matrix.f12 + f22 * matrix.f22 + f23 * matrix.f32,
-                            f20 * matrix.f02 + f21 * matrix.f12 + f22 * matrix.f22 + f23 * matrix.f33,
+                            f20 * matrix.f03 + f21 * matrix.f13 + f22 * matrix.f23 + f23 * matrix.f33,
                             f30 * matrix.f00 + f31 * matrix.f10 + f32 * matrix.f20 + f33 * matrix.f30,
                             f30 * matrix.f01 + f31 * matrix.f11 + f32 * matrix.f21 + f33 * matrix.f31,
                             f30 * matrix.f02 + f31 * matrix.f12 + f32 * matrix.f22 + f33 * matrix.f32,
-                            f30 * matrix.f02 + f31 * matrix.f12 + f32 * matrix.f22 + f33 * matrix.f33);
+                            f30 * matrix.f03 + f31 * matrix.f13 + f32 * matrix.f23 + f33 * matrix.f33);
     }
 }
