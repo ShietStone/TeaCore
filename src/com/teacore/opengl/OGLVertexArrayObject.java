@@ -67,7 +67,7 @@ public final class OGLVertexArrayObject extends OGLAllocatedData {
     
     /**
      * Unbinds this OGLVertexArrayObject from the rendering pipeline. Note this will unbind any
-     * currently bind vertex array object If this object was already deleted an
+     * currently bound vertex array object. If this object was already deleted an
      * IllegalStateException is thrown.
      */
     public void unbind() {

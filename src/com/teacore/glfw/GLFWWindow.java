@@ -18,6 +18,7 @@ import org.lwjgl.system.MemoryStack;
 public final class GLFWWindow {
     
     private static ArrayList<GLFWWindow> windows;
+    private static GLFWWindow currentContext;
     
     static {
         windows = new ArrayList<>();
@@ -29,6 +30,16 @@ public final class GLFWWindow {
     public static void destroyAll() {
         while(windows.size() > 0)
             windows.get(0).destroy();
+    }
+    
+    /**
+     * Returns the GLFWWindow of which the OpenGL context is current. NUll is returned if there is
+     * none.
+     * 
+     * @return The GLFWWindow the current OpenGL context
+     */
+    public static GLFWWindow getCurrentContext() {
+        return currentContext;
     }
     
     private long windowHandle;
@@ -81,7 +92,7 @@ public final class GLFWWindow {
             );
         }
 
-        GLFW.glfwMakeContextCurrent(windowHandle);
+        makeContextCurrent();
         GLFW.glfwSwapInterval(vSync ? 1 : 0);
         GLFW.glfwShowWindow(windowHandle);
         GL.createCapabilities();
@@ -313,6 +324,7 @@ public final class GLFWWindow {
             throw new IllegalStateException("Window was already destroyed");
         
         GLFW.glfwMakeContextCurrent(windowHandle);
+        currentContext = this;
     }
     
     /**
@@ -340,6 +352,18 @@ public final class GLFWWindow {
         
         destroyed = true;
         windows.remove(this);
+        
+        if(currentContext == this)
+            currentContext = null;
+    }
+    
+    /**
+     * Returns if this window was destroyed using destroy().
+     * 
+     * @return If this windows was destroyed
+     */
+    public boolean isDestroyed() {
+        return destroyed;
     }
     
     /**

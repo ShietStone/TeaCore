@@ -2,6 +2,8 @@ package com.teacore.opengl;
 
 import java.util.ArrayList;
 
+import com.teacore.glfw.GLFWWindow;
+
 /**
  * This class manages allocated data (often on the GPU) by OpenGL. This way using deleteAll()
  * every not yet deleted data will be deleted, thus preventing memory leaks.
@@ -44,21 +46,30 @@ public class OGLAllocatedData {
         while(instanceList.size() > 0) {
             OGLAllocatedData allocatedData = instanceList.get(0);
             
-            if(!allocatedData.isDeleted())
+            if(!allocatedData.isDeleted()) {
+                allocatedData.getContext().makeContextCurrent();
                 allocatedData.delete();
+            }
             
             instanceList.remove(0);
         }
     }
     
+    //TODO Handle the OGLAllocatedData in the GLFWWindwo class itself, thus providing the ability to delete them if the window gets destroyed
     //TODO Create a Deletable interface and make a manager class, deleted flag should be managed by the inheriting classes
     
     private boolean deleted;
+    private GLFWWindow context;
     
     /**
      * Creates an empty OGLAllocatedData object and sets the deleted flag to false.
      */
     public OGLAllocatedData() {
+        context = GLFWWindow.getCurrentContext();
+        
+        if(context == null || context.isDestroyed())
+            throw new IllegalStateException("The current OpenGL context is not usable");
+        
         deleted = false;
     }
     
@@ -76,5 +87,14 @@ public class OGLAllocatedData {
      */
     public void delete() {
         deleted = true;
+    }
+    
+    /**
+     * Returns the GLFWWindow in which OpenglGL context this data was created.
+     * 
+     * @return The GLFWWindow holding this datas context
+     */
+    public GLFWWindow getContext() {
+        return context;
     }
 }
