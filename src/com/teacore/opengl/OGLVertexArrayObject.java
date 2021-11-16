@@ -5,6 +5,8 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import com.teacore.glfw.GLFWWindow;
+
 /**
  * This class manages an indexed OpenGL VertexArrayObject and provides utility functions to work
  * with it. To help avoid memory leaks, this class also extends OGLAllocatedData.
@@ -56,34 +58,44 @@ public final class OGLVertexArrayObject extends OGLAllocatedData {
     
     /**
      * Binds this OGLVertexArrayObject to be used in the rendering pipeline. If this object was
-     * already deleted an IllegalStateException is thrown.
+     * already deleted or the wrong OpenGL context is current  an IllegalStateException is thrown.
      */
     public void bind() {
         if(isDeleted())
             throw new IllegalStateException("Vertex array object was already deleted");
+        
+        if(getContext() != GLFWWindow.getCurrentContext())
+            throw new IllegalStateException("The wrong OpenGL context is current");
         
         GL30.glBindVertexArray(vaoHandle);
     }
     
     /**
      * Unbinds this OGLVertexArrayObject from the rendering pipeline. Note this will unbind any
-     * currently bound vertex array object. If this object was already deleted an
-     * IllegalStateException is thrown.
+     * currently bound vertex array object. If this object was already deleted or the wrong OpenGL 
+     * context is current an IllegalStateException is thrown.
      */
     public void unbind() {
         if(isDeleted())
             throw new IllegalStateException("Vertex array object was already deleted");
+        
+        if(getContext() != GLFWWindow.getCurrentContext())
+            throw new IllegalStateException("The wrong OpenGL context is current");
         
         GL30.glBindVertexArray(0);
     }
     
     /**
      * Enables all buffers (vertex arrays) of this OGLVertexArrayObject. Must be called after
-     * bind(). Throws an IllegalStateException if already deleted.
+     * bind(). Throws an IllegalStateException if already deleted or the wrong OpenGL context is 
+     * current.
      */
     public void enable() {
         if(isDeleted())
             throw new IllegalStateException("Vertex array object was already deleted");
+        
+        if(getContext() != GLFWWindow.getCurrentContext())
+            throw new IllegalStateException("The wrong OpenGL context is current");
         
         for(int index = 0; index < vboHandles.length - 1; index++)
             GL20.glEnableVertexAttribArray(index);
@@ -91,11 +103,15 @@ public final class OGLVertexArrayObject extends OGLAllocatedData {
     
     /**
      * Disables all buffers (vertex arrays) of this OGLVertexArrayObject. Must be called before
-     * unbind(). Throws an IllegalStateException if already deleted.
+     * unbind(). Throws an IllegalStateException if already deleted or the wrong OpenGL context is
+     * current.
      */
     public void disable() {
         if(isDeleted())
             throw new IllegalStateException("Vertex array object was already deleted");
+        
+        if(getContext() != GLFWWindow.getCurrentContext())
+            throw new IllegalStateException("The wrong OpenGL context is current");
         
         for(int index = 0; index < vboHandles.length - 1; index++)
             GL20.glDisableVertexAttribArray(index);
@@ -103,23 +119,30 @@ public final class OGLVertexArrayObject extends OGLAllocatedData {
     
     /**
      * This method will initiate a draw call using the currently bound and used components of the
-     * rendering pipeline. Will throw an IllegalStateException if this object was deleted already.
+     * rendering pipeline. Will throw an IllegalStateException if this object was deleted already
+     * or if the wrong OpenGL context is current.
      */
     public void draw() {
         if(isDeleted())
             throw new IllegalStateException("Vertex array object was already deleted");
+        
+        if(getContext() != GLFWWindow.getCurrentContext())
+            throw new IllegalStateException("The wrong OpenGL context is current");
         
         GL11.glDrawElements(GL11.GL_TRIANGLES, vertexCount, GL11.GL_UNSIGNED_INT, 0);
     }
     
     /**
      * Will delete this OGLVertexArrayObject and unregister the OGLAllocatedData. Throws an 
-     * IllegalStateException if already deleted.
+     * IllegalStateException if already deleted or if the wrong OpenGL context is current.
      */
     @Override
     public void delete() {
         if(isDeleted())
             throw new IllegalStateException("Vertex array object was already deleted");
+        
+        if(getContext() != GLFWWindow.getCurrentContext())
+            throw new IllegalStateException("The wrong OpenGL context is current");
         
         super.delete();
         OGLAllocatedData.unregister(this);

@@ -2,6 +2,8 @@ package com.teacore.opengl;
 
 import org.lwjgl.opengl.GL20;
 
+import com.teacore.glfw.GLFWWindow;
+
 /**
  * This class manages an OpenGL shader and further provides methods that wrap the corresponding GL
  * calls. To avoid memory leaks this class extends OGLAllocatedData and (un-)registers itself there
@@ -69,23 +71,30 @@ public final class OGLShader extends OGLAllocatedData {
     
     /**
      * Sets this shader program to be used in the rendering pipeline. Throws an 
-     * IllegalStateException if the program was already deleted.
+     * IllegalStateException if the program was already deleted or the wrong OpenGL context is
+     * current.
      */
     public void use() {
         if(isDeleted())
             throw new IllegalStateException("The shader program was already deleted");
+        
+        if(getContext() != GLFWWindow.getCurrentContext())
+            throw new IllegalStateException("The wrong OpenGL context is current");
         
         GL20.glUseProgram(programHandle);
     }
     
     /**
      * Removes this shader program from active use. Note that this call would also remove any other
-     * shader program from active use, not just this one. If this program was already deleted an
-     * IllegalStateException is thrown.
+     * shader program from active use, not just this one. If this program was already deleted or the 
+     * wrong OpenGL context is current an IllegalStateException is thrown.
      */
     public void stopUse() {
         if(isDeleted())
             throw new IllegalStateException("The shader program was already deleted");
+        
+        if(getContext() != GLFWWindow.getCurrentContext())
+            throw new IllegalStateException("The wrong OpenGL context is current");
         
         GL20.glUseProgram(0);
     }
@@ -93,7 +102,7 @@ public final class OGLShader extends OGLAllocatedData {
     /**
      * Returns the location of any uniform field in this shader program, specified by the given
      * name. If the name is null an IllegalArgumentException is thrown. If the shader program was
-     * already deleted an IllegalStateException is thrown.
+     * already deleted or the wrong OpenGL context is current an IllegalStateException is thrown.
      * 
      * @param name The uniform fields name
      * @return The location to upload the data to
@@ -105,17 +114,24 @@ public final class OGLShader extends OGLAllocatedData {
         if(isDeleted())
             throw new IllegalStateException("The shader program was already deleted");
 
+        if(getContext() != GLFWWindow.getCurrentContext())
+            throw new IllegalStateException("The wrong OpenGL context is current");
+        
         return GL20.glGetUniformLocation(programHandle, name);
     }
     
     /**
      * Deletes this shader program and unregisters this object from OGLAllocatedData. An
-     * IllegalStateException is thrown if it was already deleted.
+     * IllegalStateException is thrown if it was already deleted or the wrong OpenGL context is 
+     * current.
      */
     @Override
     public void delete() {
         if(isDeleted())
             throw new IllegalStateException("The shader program was already deleted");
+        
+        if(getContext() != GLFWWindow.getCurrentContext())
+            throw new IllegalStateException("The wrong OpenGL context is current");
         
         super.delete();
         OGLAllocatedData.unregister(this);
