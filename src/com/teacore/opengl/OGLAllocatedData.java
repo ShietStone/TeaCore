@@ -39,6 +39,8 @@ public class OGLAllocatedData {
         instanceList.remove(data);
     }
     
+    //TODO OGLAllocatedData Bug index0 out of 0 self removement
+    
     /**
      * Deletes all registered OGLAllocatedData instances that were not deleted yet. 
      */
@@ -46,12 +48,12 @@ public class OGLAllocatedData {
         while(instanceList.size() > 0) {
             OGLAllocatedData allocatedData = instanceList.get(0);
             
+            instanceList.remove(0);
+
             if(!allocatedData.isDeleted()) {
                 allocatedData.getContext().makeContextCurrent();
                 allocatedData.delete();
-            }
-            
-            instanceList.remove(0);
+            }            
         }
     }
     
